@@ -91,17 +91,28 @@ Prerequisites
    ```
 
 2. Install the required dependencies:
+
+   ```
    npm install
+   ```
 
 3. Create a .env file in the root of the Server directory and add your configuration:
+
+   ```
    GOOGLE_SAFE_BROWSING_KEY=your_api_key_here
    PORT=3000
+   ```
 
 4. Start the Node.js server:
+
+   ```
    npm start
+   ```
 
 5. In a separate terminal window, start ngrok to expose your local port:
+   ```
    ngrok http 3000
+   ```
 
 (Keep the terminal open and copy the generated HTTPS URL, e.g., https://xyz.ngrok-free.app)
 
