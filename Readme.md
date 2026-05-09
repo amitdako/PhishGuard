@@ -5,10 +5,8 @@ PhishGuard is a lightweight, decoupled Gmail Add-on designed to analyze incoming
 ## Tech Stack
 
 - **Frontend:** Google Workspace Apps Script
-- **Backend:** Node.js, Express.js (Custom Middleware Architecture)
+- **Backend:** Node.js, Express.js
 - **Security Integrations:** Google Safe Browsing API, Custom NLP & Regex Engines
-
----
 
 ## Architecture & Design Decisions
 
@@ -47,3 +45,70 @@ A quick overview of the repository to help you navigate the codebase:
 │
 └── README.md
 ```
+
+## Core Features & Detection Engines
+
+Rather than relying on a single point of failure, PhishGuard routes email data through specialized analyzers and aggregates the results:
+
+The Correlation Engine (Aggregator): The heart of the system. It weights signals from different analyzers to calculate a final Risk Score. For example, a suspicious financial request might flag a REVIEW status, but if combined with an SPF failure, the correlation engine escalates it to a hard BLOCK.
+
+URL Unwrapping: Defeats common evasion techniques by resolving and unwrapping redirected URLs (e.g., Google search redirects) before scanning them against the Safe Browsing API.
+
+Homograph & Mixed-Script Detection: Identifies domain spoofing and malicious attachments by detecting Cyrillic/Latin character mixing in file names and links.
+
+HTML Smuggling Prevention: Flags .html and .svg attachments, recognizing them as modern vectors for bypassing network filters to drop local payloads.
+
+## Trade-offs & Future Work
+
+Building this within a limited timeframe required prioritizing core architecture and deterministic security rules over experimental features. If I were to take this project to production, I would focus on the following enhancements:
+
+AI-Powered Content Analysis (LLM Integration):
+
+Current State: The ContentAnalyzer uses a threshold-based NLP ruleset (Regex/Keyword arrays) to detect Social Engineering and BEC (Business Email Compromise). It is extremely fast and cost-effective.
+
+Future State: Integrate a lightweight LLM API to analyze the contextual intent of the email body. This would significantly reduce false positives when dealing with subtle psychological manipulation or highly targeted spear-phishing, where traditional keywords fail.
+
+Persistent Threat Intelligence (Database):
+
+Integrate a database (e.g., MongoDB) to log malicious hashes and URLs over time, creating an internal cache that speeds up future analyses without repeatedly querying external APIs.
+
+## Getting Started (Local Development)
+
+To run this project locally and connect it to your Gmail account, follow these steps:
+
+Prerequisites
+
+- Node.js (v16 or higher)
+- ngrok (to expose the local backend to Google Apps Script)
+- A Google Cloud project with the Safe Browsing API enabled.
+
+### 1. Backend Setup
+
+1. Navigate to the Server directory:
+   cd Server
+
+2. Install the required dependencies:
+   npm install
+
+3. Create a .env file in the root of the Server directory and add your configuration:
+   GOOGLE_SAFE_BROWSING_KEY=your_api_key_here
+   PORT=3000
+
+4. Start the Node.js server:
+   npm start
+
+5. In a separate terminal window, start ngrok to expose your local port:
+   ngrok http 3000
+
+(Keep the terminal open and copy the generated HTTPS URL, e.g., https://xyz.ngrok-free.app)
+
+### 2. Frontend (Gmail Add-on) Setup
+
+1. Go to Google Apps Script and create a new project.
+2. Copy the contents of Add-on/Code.gs into the script editor.
+3. Open the Project Settings (gear icon) and check the box for "Show 'appsscript.json' manifest file in editor".
+4. Go back to the editor, open appsscript.json, and paste the contents from Add-on/appsscript.json.
+5. In Code.gs, locate the API endpoint variable (SERVER_URL) and update it with your active ngrok HTTPS URL.
+6. Save the project, then click Deploy > Test deployments.
+7. Select "Gmail" as the application, click Install, and grant the necessary permissions.
+8. Open your Gmail, click on any email, and open the PhishGuard add-on from the right-hand side panel to see it in action!
