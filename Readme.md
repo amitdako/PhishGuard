@@ -111,7 +111,7 @@ Prerequisites
 
 5. In a separate terminal window, start ngrok to expose your local port:
    ```
-   ngrok http 3000
+   npx ngrok http 3000
    ```
 
 (Keep the terminal open and copy the generated HTTPS URL, e.g., https://xyz.ngrok-free.app)
