@@ -1,4 +1,4 @@
-const SERVER_URL = "https://YOUR_NGROK_URL.ngrok-free.app/api/analyze"; // שים לב לעדכן את זה כשאתה מריץ
+const SERVER_URL = "https://YOUR_NGROK_URL.ngrok-free.app/api/analyze"; // אנא עדכנו את הקישור שלכם לפני שאתם מריצים
 const MAX_BODY_LENGTH = 50000; // הגבלת גודל למניעת עומס
 
 // הפונקציה הראשית שגוגל מפעילה כשפותחים מייל
