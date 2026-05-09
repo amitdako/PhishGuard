@@ -1,5 +1,3 @@
-// backend/logic/constants.js
-
 const Verdict = Object.freeze({
   PASS: "PASS",
   REVIEW: "REVIEW",

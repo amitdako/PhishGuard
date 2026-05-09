@@ -1,5 +1,3 @@
-// backend/logic/Aggregator.js
-
 const {
   Verdict,
   Severity,
