@@ -85,7 +85,10 @@ Prerequisites
 ### 1. Backend Setup
 
 1. Navigate to the Server directory:
+
+   ```
    cd Server
+   ```
 
 2. Install the required dependencies:
    npm install
